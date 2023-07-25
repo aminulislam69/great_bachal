@@ -1,17 +1,21 @@
 import React, { useState } from 'react'
-import {Grid, TextField, Button} from '@mui/material';
+import {Grid, TextField, Button, Alert} from '@mui/material';
 import Resistrationimg from '../assets/Resistration.png'
 import Headingforreglog from '../assets/components/Headingforreglog';
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useNavigate } from 'react-router-dom';
+import { BsEyeSlash, BsEye } from 'react-icons/bs'
+
 
 
 let innitialValue = {
   email:"",
   fullname:"",
   password:"",
-  loding: false
+  loding: false,
+  error:"",
+  eye:false
 
 }
 
@@ -35,6 +39,32 @@ let handlevalue = (e) => {
 let handleclick = () =>{
   let { email, fullname, password} = values
 
+
+if(!email){
+  setValues({
+        ...values,
+        error:"Enter an email"
+      })
+      return
+}
+
+if(!fullname){
+  setValues({
+        ...values,
+        error:"Enter your name"
+      })
+      return
+}
+
+
+if(!password){
+  setValues({
+        ...values,
+        error:"Enter password"
+      })
+      return
+}
+
   setValues({
     ...values,
     loding: true
@@ -52,7 +82,7 @@ sendEmailVerification(auth.currentUser)
       password:"",
       loding: false
     })
-    // navigate('/login')
+    navigate('/login')
   })
 }
 
@@ -66,12 +96,21 @@ sendEmailVerification(auth.currentUser)
             <p>Free register and you can enjoy it</p>
             <div className='reginput'> 
                 <TextField value={values.email} onChange={handlevalue} name='email' id="outlined-basic" label="Email Address" variant="outlined" />
+                {values.error.includes("email") && <Alert severity="error">{values.error}</Alert>}
+                
             </div>
             <div className='reginput'>
                 <TextField value={values.fullname}  onChange={handlevalue} name='fullname' id="outlined-basic" label="Full name" variant="outlined" /> 
+                {values.error.includes("name") && <Alert severity="error">{values.error}</Alert>}
             </div>
             <div className='reginput'>
-                <TextField value={values.password}  onChange={handlevalue} name='password' id="outlined-basic" label="Password" variant="outlined" />
+                <TextField value={values.password} type= {values.eye ?  'text' : 'password'} onChange={handlevalue} name='password' id="outlined-basic" label="Password" variant="outlined" />
+                {values.error.includes("password") && <Alert severity="error">{values.error}</Alert>}
+                <div onClick={()=>{setValues({...values, eye : !values.eye})}} className='eye'>
+                  {values.eye ? <BsEyeSlash/> : <BsEye/>}
+                </div>
+                
+                
             </div>
 
             {values.loding ?

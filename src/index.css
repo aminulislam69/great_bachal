@@ -23,6 +23,7 @@
 
 .reginput{
   margin-top: 30px;
+ 
 }
 
 .reginput .MuiTextField-root{
@@ -41,4 +42,9 @@
   width: 35%;
   margin-top: 20px;
   cursor:pointer;
+}
+
+.eye{
+ 
+  cursor: pointer;
 }
