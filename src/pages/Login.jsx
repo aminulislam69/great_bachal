@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import {Grid, TextField, Button} from '@mui/material';
+import {Grid, TextField, Button, Alert} from '@mui/material';
 import Headingforreglog from '../assets/components/Headingforreglog';
 import Loginpic from '../assets/Loginpic.png'
 import Google from '../assets/Google.png'
 import LoadingButton from '@mui/lab/LoadingButton';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider} from "firebase/auth";
+import { Link, useNavigate } from 'react-router-dom';
 
 
 
@@ -15,6 +16,8 @@ let innitialValue = {
 }
 
 const Login = () => {
+
+  let navigate = useNavigate()
 
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
@@ -45,9 +48,16 @@ let handleclick = () =>{
       password:"",
       loding: false
     })
-    // navigate('/login')
+    navigate('/home')
     console.log(user)
-  })
+  }).catch((error) => {
+    setValues({
+      ...values,
+      password:"",
+      loding: false
+    })
+    console.log(error)
+  });
 }
 
 
@@ -73,6 +83,11 @@ let handleGoogleLogin = () =>{
             <div className='reginput'>
                 <TextField value={values.password}  onChange={handlevalue} name='password' id="outlined-basic" label="Password" variant="outlined" />
             </div>
+
+            <div className='warning'>
+              <Alert severity="warning">Don't have an account! <Link to={"/"}>Resistration</Link></Alert>
+            </div>
+
             {values.loding ?
               <div className='regbttn'>
                     <LoadingButton loading variant="outlined">

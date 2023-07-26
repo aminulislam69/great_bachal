@@ -48,3 +48,28 @@
  
   cursor: pointer;
 }
+
+.warning{
+  width: 80%;
+  margin-top: 30px;
+}
+
+.forgotPassword{
+  background: #5F35F5;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.forgotPassword .box{
+  padding: 20px;
+  border-radius: 20px;
+  background: white;
+}
+
+.forgotPassword .box .MuiFormControl-root{
+  width: 100%;
+  margin: 10px 0;
+
+}

@@ -4,7 +4,7 @@ import Resistrationimg from '../assets/Resistration.png'
 import Headingforreglog from '../assets/components/Headingforreglog';
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { BsEyeSlash, BsEye } from 'react-icons/bs'
 
 
@@ -72,10 +72,10 @@ if(!password){
 
   createUserWithEmailAndPassword(auth, email, password).then((user)=>{
     const auth = getAuth();
-sendEmailVerification(auth.currentUser)
-  .then(() => {
-    console.log("email sent")
-  });
+// sendEmailVerification(auth.currentUser)
+//   .then(() => {
+//     console.log("email sent")
+//   });
     setValues({
       email:"",
       fullname:"",
@@ -113,6 +113,10 @@ sendEmailVerification(auth.currentUser)
                 
             </div>
 
+            <div className='warning'>
+              <Alert severity="warning">Already have an account! <Link to={"/login"}>Login</Link></Alert>
+            </div>
+
             {values.loding ?
               <div className='regbttn'>
                     <LoadingButton loading variant="outlined">
@@ -124,6 +128,10 @@ sendEmailVerification(auth.currentUser)
                     <Button onClick={handleclick} variant="contained">Sign up</Button>
               </div>
            }
+
+            <div className='warning'>
+              <Alert severity="info">Forgoat password! <Link to={"/forgotpassword"}>Click Here</Link></Alert>
+            </div>
             
             </div>
             
