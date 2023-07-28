@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {Grid, TextField, Button, Alert} from '@mui/material';
 import Resistrationimg from '../assets/Resistration.png'
-import Headingforreglog from '../assets/components/Headingforreglog';
+import Headingforreglog from '../components/Headingforreglog';
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useNavigate, Link } from 'react-router-dom';
@@ -56,11 +56,12 @@ if(!fullname){
       return
 }
 
+var pattern = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
 
-if(!password){
+if(!password || !pattern.test(password)){
   setValues({
         ...values,
-        error:"Enter password"
+        error:"Enter password containing Aa3#"
       })
       return
 }
@@ -72,10 +73,10 @@ if(!password){
 
   createUserWithEmailAndPassword(auth, email, password).then((user)=>{
     const auth = getAuth();
-// sendEmailVerification(auth.currentUser)
-//   .then(() => {
-//     console.log("email sent")
-//   });
+  sendEmailVerification(auth.currentUser)
+    .then(() => {
+    console.log("email sent")
+  });
     setValues({
       email:"",
       fullname:"",
@@ -105,8 +106,9 @@ if(!password){
             </div>
             <div className='reginput'>
                 <TextField value={values.password} type= {values.eye ?  'text' : 'password'} onChange={handlevalue} name='password' id="outlined-basic" label="Password" variant="outlined" />
-                {values.error.includes("password") && <Alert severity="error">{values.error}</Alert>}
-                <div onClick={()=>{setValues({...values, eye : !values.eye})}} className='eye'>
+                <div className='reginputalart'> {values.error.includes("password") && <Alert severity="error">{values.error}</Alert>}</div>
+                
+                <div  onClick={()=>{setValues({...values, eye : !values.eye})}} className='eye'>
                   {values.eye ? <BsEyeSlash/> : <BsEye/>}
                 </div>
                 

@@ -1,18 +1,21 @@
 import React, { useState } from 'react'
 import {Grid, TextField, Button, Alert} from '@mui/material';
-import Headingforreglog from '../assets/components/Headingforreglog';
+import Headingforreglog from '../components/Headingforreglog';
 import Loginpic from '../assets/Loginpic.png'
 import Google from '../assets/Google.png'
 import LoadingButton from '@mui/lab/LoadingButton';
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider} from "firebase/auth";
 import { Link, useNavigate } from 'react-router-dom';
+import { BsEyeSlash, BsEye } from 'react-icons/bs'
+import { toast } from 'react-toastify';
 
 
 
 let innitialValue = {
   email:"",
   password:"",
-  loding: false
+  loding: false,
+  eye:false
 }
 
 const Login = () => {
@@ -23,6 +26,11 @@ const Login = () => {
   const provider = new GoogleAuthProvider();
 
   let [values, setValues] = useState(innitialValue)
+  let [error, setError]= useState("")
+
+
+  const notify = (msg) => toast(msg);
+
 
   
 let handlevalue = (e) => {
@@ -48,15 +56,24 @@ let handleclick = () =>{
       password:"",
       loding: false
     })
-    navigate('/home')
-    console.log(user)
+    // navigate('/home')
+    if(!user.user.emailVerified){
+      notify("please varify your email to Login")
+    }else{
+      navigate("/bachal/home")
+    }
+
   }).catch((error) => {
+        const errorCode = error.code;
+        //const errorMessage = error.message;
+        notify(errorCode)
     setValues({
       ...values,
       password:"",
       loding: false
     })
-    console.log(error)
+    setError(errorCode)
+    console.log(errorCode)
   });
 }
 
@@ -79,10 +96,17 @@ let handleGoogleLogin = () =>{
             <div className='reginput'> 
                 <TextField value={values.email} onChange={handlevalue} name='email' id="outlined-basic" label="Email Address" variant="outlined" />
             </div>
+            {error.includes("auth/user-not-found") && <div className='reginputalart'> <Alert severity="error">  User not found! </Alert> </div> }
+            
+            
          
             <div className='reginput'>
-                <TextField value={values.password}  onChange={handlevalue} name='password' id="outlined-basic" label="Password" variant="outlined" />
+                <TextField value={values.password} type= {values.eye ?  'text' : 'password'}  onChange={handlevalue} name='password' id="outlined-basic" label="Password" variant="outlined" />
+                <div onClick={()=>{setValues({...values, eye : !values.eye})}} className='eye'>
+                  {values.eye ? <BsEyeSlash/> : <BsEye/>}
+                </div>
             </div>
+            {error.includes("auth/wrong-password") && <div className='reginputalart'> <Alert severity="error"> Wrong Password !</Alert> </div> }
 
             <div className='warning'>
               <Alert severity="warning">Don't have an account! <Link to={"/"}>Resistration</Link></Alert>
@@ -97,6 +121,8 @@ let handleGoogleLogin = () =>{
                 :
               <div className='regbttn'>
                     <Button onClick={handleclick} variant="contained">Login to Continue</Button>
+                   
+                  
               </div>
            }
             
