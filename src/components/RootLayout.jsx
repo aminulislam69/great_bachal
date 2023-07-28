@@ -3,9 +3,28 @@ import { Outlet } from 'react-router-dom'
 import Grid from '@mui/material/Grid';
 import propic from '../assets/propic.png' 
 import { AiOutlineHome, AiOutlineMessage, AiFillNotification, AiFillSetting, AiOutlineLogout} from 'react-icons/ai'
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate} from 'react-router-dom';
+import { getAuth, signOut } from "firebase/auth";
 
 const RootLayout = () => {
+
+  let navigate = useNavigate()
+
+  const auth = getAuth();
+
+  let handleLogout =()=>{
+
+      signOut(auth).then(() => {
+          navigate("/login")
+        }).catch((error) => {
+          // An error happened.
+        });
+
+  }
+
+
+  const location = useLocation()
+  console.log(location.pathname)
   return (
     <>
    <Grid container spacing={2}>
@@ -15,17 +34,31 @@ const RootLayout = () => {
                 <img src={ propic }/>
                 <ul>
                     <li>
-                        <Link to="/bachal/home">
-                            <AiOutlineHome className='icon'/>
+                        <Link to="/bachal/home" className= { location.pathname == "/bachal/home" ? 'active' : 'icon'}>
+                            <AiOutlineHome />
                         </Link>
                     </li>
                     <li>
-                        <Link to="/bachal/message">
-                            <AiOutlineMessage className='icon'/>
+                        <Link to="/bachal/message" className= { location.pathname == "/bachal/message" ? 'active' : 'icon'}>
+                            <AiOutlineMessage />
                         </Link></li>
-                    <li><AiFillNotification className='icon'/></li>
-                    <li><AiFillSetting className='icon'/></li>
-                    <li><AiOutlineLogout className='icon'/></li>
+                    <li>
+                        <Link to="" className= { location.pathname == "" ? 'active' : 'icon'}>
+                            <AiFillNotification />
+                        </Link>
+                    </li>
+                      
+                    <li>
+                        <Link to="" className= { location.pathname == "" ? 'active' : 'icon'}>
+                            <AiFillSetting />
+                        </Link>
+                    </li>
+                      
+                    <li>
+                        <Link  to=" "  onClick={handleLogout} className= { location.pathname == "" ? 'active' : 'icon'}>
+                            < AiOutlineLogout />
+                        </Link>
+                    </li>
                 </ul>
 
             </div>
