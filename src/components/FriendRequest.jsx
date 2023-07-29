@@ -2,11 +2,12 @@ import React from 'react'
 import propic from '../assets/propic.png'
 import Button from '@mui/material/Button';
 
-const Friends = () => {
+
+const FriendRequest = () => {
   return (
     <div className="box">
 
-        <h3 >Friend</h3>
+        <h3>Friend Request</h3>
         <div className="list">
             <div className="img">
               <img src={propic}/>
@@ -157,4 +158,4 @@ const Friends = () => {
   )
 }
 
-export default Friends
+export default FriendRequest
