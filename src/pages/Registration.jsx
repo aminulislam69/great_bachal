@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import {Grid, TextField, Button, Alert} from '@mui/material';
 import Resistrationimg from '../assets/Resistration.png'
 import Headingforreglog from '../components/Headingforreglog';
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
+import { getDatabase, ref, set, push } from "firebase/database";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useNavigate, Link } from 'react-router-dom';
 import { BsEyeSlash, BsEye } from 'react-icons/bs'
@@ -22,6 +23,7 @@ let innitialValue = {
 const Registration = () => {
 
   const auth = getAuth();
+  const db = getDatabase();
 
   let navigate = useNavigate()
 
@@ -72,11 +74,22 @@ if(!password || !pattern.test(password)){
   })
 
   createUserWithEmailAndPassword(auth, email, password).then((user)=>{
-    const auth = getAuth();
-  sendEmailVerification(auth.currentUser)
-    .then(() => {
-    console.log("email sent")
-  });
+    updateProfile(auth.currentUser, {
+      displayName: values.fullname, photoURL: "https://i.ibb.co/Tht5KnJ/profilepicdemo.png"
+    }).then(() => {
+      sendEmailVerification(auth.currentUser)
+        .then(() => {
+        console.log("email sent")
+        console.log(user)
+
+        set(push(ref(db, 'users/')), {
+          username: values.fullname,
+          email: values.email,
+          profile_picture : user.user.photoURL
+        });
+      })
+    })
+  
     setValues({
       email:"",
       fullname:"",
