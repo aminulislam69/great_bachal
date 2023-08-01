@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import propic from '../assets/propic.png'
 import Button from '@mui/material/Button';
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, set } from "firebase/database";
+import { getAuth } from "firebase/auth";
 
 
 
 const UserList = () => {
 
   const db = getDatabase();
+  const auth = getAuth();
 
   let [usersList, setUersList] = useState([])
+
+ 
 
   useEffect(()=>{
 
@@ -17,16 +21,29 @@ const UserList = () => {
       onValue(usersRef, (snapshot) => {
         let arr = []
       snapshot.forEach(item=>{
-        arr.push(item.val())
+        arr.push({...item.val(), id:item.key})
       })
 
       setUersList(arr)
+     
     
     });
 
   },[])
 
-  console.log(usersList)
+  
+
+  let handleFriendReq = (item) =>{
+      set(ref(db, 'friendreq/'), {
+        whosendid: auth.currentUser.uid,
+        whosendname: auth.currentUser.displayName,
+        whoreciveid: item.id,
+        whorecivename: item.username
+      });
+  }
+
+
+  
 
   return (
     <div className="box">
@@ -44,7 +61,7 @@ const UserList = () => {
             <p>{item.email}</p>
           </div>
           <div className="button">
-            <Button size="small" variant="contained">+</Button>
+            <Button onClick={()=>handleFriendReq(item)} size="small" variant="contained">+</Button>
           </div>
           </div>
          

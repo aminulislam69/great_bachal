@@ -56,7 +56,7 @@ let handleclick = () =>{
       password:"",
       loding: false
     })
-    navigate('/home')
+      // navigate("/bachal/home")
     if(!user.user.emailVerified){
       notify("please varify your email to Login")
     }else{
