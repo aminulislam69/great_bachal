@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import propic from '../assets/propic.png'
 import Button from '@mui/material/Button';
-import { getDatabase, ref, onValue, set, push } from "firebase/database";
+import { getDatabase, ref, onValue, set, push,  remove } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
 
@@ -47,7 +47,7 @@ const UserList = () => {
   },[])
 
   let handleCancle =(item)=>{
-    console.log(item)
+    remove(ref(db, "friendreq/" + item.id));
   }
 
   let handleFriendReq = (item) =>{

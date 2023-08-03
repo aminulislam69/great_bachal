@@ -8,6 +8,8 @@ import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvide
 import { Link, useNavigate } from 'react-router-dom';
 import { BsEyeSlash, BsEye } from 'react-icons/bs'
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux'
+import { userdata } from '../slices/user/userSlice';
 
 
 
@@ -24,6 +26,7 @@ const Login = () => {
 
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
+  const dispatch = useDispatch()
 
   let [values, setValues] = useState(innitialValue)
   let [error, setError]= useState("")
@@ -56,10 +59,12 @@ let handleclick = () =>{
       password:"",
       loding: false
     })
-      // navigate("/bachal/home")
+     
     if(!user.user.emailVerified){
       notify("please varify your email to Login")
     }else{
+      dispatch(userdata(user.user))
+      localStorage.setItem("user",JSON.stringify(user.user))
       navigate("/bachal/home")
     }
 

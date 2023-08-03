@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {Button} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Group from '../components/Group';
@@ -7,10 +7,24 @@ import UserList from '../components/UserList';
 import FriendRequest from '../components/FriendRequest';
 import MyGroups from '../components/MyGroups';
 import Block from '../components/Block';
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 
 
 
 const Home = () => {
+
+  let navigate = useNavigate()
+  let loginUser = useSelector((state)=> state.loggedUser.loginUser)
+
+
+  useEffect(()=>{
+
+    if(loginUser == null){
+      navigate("/login")
+    }
+
+  },[])
 
 
 
