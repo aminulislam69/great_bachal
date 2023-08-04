@@ -5,16 +5,20 @@ import propic from '../assets/propic.png'
 import { AiOutlineHome, AiOutlineMessage, AiFillNotification, AiFillSetting, AiOutlineLogout} from 'react-icons/ai'
 import { Link, useLocation, useNavigate} from 'react-router-dom';
 import { getAuth, signOut } from "firebase/auth";
+import { useSelector } from 'react-redux'
 
 const RootLayout = () => {
 
   let navigate = useNavigate()
+  let userData = useSelector((state)=>state.loggedUser.loginUser)
 
   const auth = getAuth();
 
   let handleLogout =()=>{
 
       signOut(auth).then(() => {
+        localStorage.removeItem("user")
+      
           navigate("/login")
         }).catch((error) => {
           // An error happened.
@@ -32,6 +36,7 @@ const RootLayout = () => {
           <div className='navbar'>
             <div className="navcontainer">
                 <img src={ propic }/>
+                <h4>{userData.displayName}</h4>
                 <ul>
                     <li>
                         <Link to="/bachal/home" className= { location.pathname == "/bachal/home" ? 'active' : 'icon'}>
